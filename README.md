@@ -1,6 +1,5 @@
 
-> 以下是详细的过程，可用于复习，或者不看视频的使用，最后有自己遇见的报错的解决方案
-
+> 以下是我在学习过程中总结的详细的过程，用于回顾复习
 ## 1、创建项目
 
 ### 项目环境：
@@ -1054,28 +1053,3 @@ public SeckillExecution executeSeckill(long seckillId, long userPhone, String md
 
 存储过程的目的是让update insert 能够在本地进行事务缩短了时间
 
-
-
-## 常见错误汇总
-
-**配置好 tomcat 访问 index 可以访问，访问 controller 中的请求出现 500**
-
-![1586793446330](http://images.vsnode.com/mynotes-images/202004/18/141127-64452.png)
-
-后台报错信息：org.apache.catalina.core.StandardWrapperValve.invoke Allocate exception for servlet [seckill-dispatcher]
-
-出现原因 target/WEB-INF 没有 lib
-
-在IDEA中 artifacts 中选中项目添加 lib 目录，并添加所有的依赖，后面如果还出现此类 dispatcher 层面的报错仍然需要这样修改
-
-![1586793688052](http://images.vsnode.com/mynotes-images/202004/14/000128-384631.png)
-
-配置完成后重新启动查看测试
-
-
-
-**设置Cookie 时出现黑色屏幕**
-
-无法点击秒杀号码输入，这是因为 bootstrap 版本问题，修改版本为 3.3.0 即可
-
-![1587140536865](http://images.vsnode.com/mynotes-images/202004/18/002218-401828.png)
