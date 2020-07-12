@@ -61,26 +61,6 @@ HTTP 请求地址映射原理
 
 ### 能够优化的点
 
-**秒杀地址接口**
-
-**秒杀操作优化** 
-
-![1587191759858](http://images.vsnode.com/mynotes-images/202004/19/204522-444785.png)
-
-成本分析
-
-![1587191850187](http://images.vsnode.com/mynotes-images/202004/18/143730-960706.png)
-
-使用 MySQL 的瓶颈分析 (但 update 4w次qps，正常 500次 qps)
-
-![1587192059372](http://images.vsnode.com/mynotes-images/202004/18/144104-899386.png)
-
-MySQL 中解决问题
-
-![1587192363547](http://images.vsnode.com/mynotes-images/202004/18/144604-575262.png)
-
-**优化总结**
-
 - 前端控制：暴露接口，防止按钮重复
 - 动静数据分离：CDN缓存，后端缓存
 - 事务竞争优化：减少事务锁时间（ACID）
@@ -88,52 +68,6 @@ MySQL 中解决问题
 ### Redis 优化地址暴露
 
 ### 通过缩短 update 行级锁时间
-
-原本
-
-![1587279773549](http://images.vsnode.com/mynotes-images/202004/19/150256-4777.png)
-
-降低 update 是 rowLock 的时间，缩短了一倍网络延迟和GC
-
-![1587279764505](http://images.vsnode.com/mynotes-images/202004/19/150252-298782.png)
-
-代码调整为：
-
-```java
-public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5)
-    throws SeckillException, RepeatKillException, SeckillCloseException {
-    if (md5 == null || !md5.equals(getMD5(seckillId))){
-        throw new SeckillException("seckill data rewrite");
-    }
-    // 减少库存
-    Date nowTime = new Date();
-    try {
-        //  减少库存成功，记录购买行为
-        int insertCount = successKilledMapper.insertSuccessKilled(seckillId, userPhone);
-        if (insertCount <= 0){
-            // 重复秒杀
-            throw new RepeatKillException("seckill repeat");
-        } else {
-            int updateCount = seckillMapper.reduceNumber(seckillId, nowTime);
-            if (updateCount <= 0){
-                // 没有更新记录
-                throw new SeckillCloseException("seckill is closed");
-            } else {
-                SuccessKilled successKilled = successKilledMapper.queryByIdWithSeckill(seckillId, userPhone);
-                return new SeckillExecution(seckillId, SeckillStateEnum.SUCCESS,successKilled);
-            }
-        }
-    }catch (SeckillCloseException e1){
-        throw e1;
-    }catch (RepeatKillException e2){
-        throw e2;
-    }catch (Exception e){
-        logger.error(e.getMessage(), e);
-        // 编译器异常改成运行期异常，方便事务回滚
-        throw new SeckillException("seckill inner error");
-    }
-}
-```
 
 ### 事务 SQL 在MySQL 段执行（存储过程）
 
