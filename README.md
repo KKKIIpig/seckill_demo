@@ -1,6 +1,6 @@
 
 > 以下是我在学习过程中总结的详细的过程，用于回顾复习
-## 1、创建项目
+## 创建项目
 
 ### 项目环境：
 
@@ -19,16 +19,7 @@ Maven 版本 ： maven 3.6.1
 
 这里使用的是 MySQL（事务+行锁） ，现在 redis 也能很好的支持事务，尤其适合在高并发情况下完成。
 
-## 5、web 层
-
-**前端页面流程**
-
-![1586764302146](http://images.vsnode.com/mynotes-images/202004/13/155145-451214.png)
-
-**秒杀流程逻辑**
-
-![1586764385034](http://images.vsnode.com/mynotes-images/202004/13/155305-552723.png)
-
+## web 层
 ### Restful
 
 - URL合理的表达方式
@@ -43,21 +34,7 @@ Maven 版本 ： maven 3.6.1
 - PUT 修改
 - DELETE 删除
 
-**秒杀 API 的URL 设计**
-
-![1586764815318](http://images.vsnode.com/mynotes-images/202004/21/220723-497918.png)
-
-### SpringMVC 
-
-Sping MVC 在秒杀系统中的运行流程
-
-![1586764956761](http://images.vsnode.com/mynotes-images/202004/13/160240-101267.png)
-
-HTTP 请求地址映射原理
-
-![1586765043468](http://images.vsnode.com/mynotes-images/202004/18/142248-664463.png)
-
-## 6、秒杀优化
+## 秒杀优化
 
 ### 能够优化的点
 
